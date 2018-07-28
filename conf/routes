@@ -9,10 +9,10 @@ GET     /                           controllers.HomeController.index
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
 
-POST /ori/route     @controllers.RouteController.abc()
+POST /ori/route         @controllers.RouteController.createGrid()
 
-#PUT /ori/route
+#PUT /ori/route         @controllers.RouteController.updateGrid()
 
-#GET /ori/route
+#GET /ori/route         @controllers.RouteController.getGrid()
 
-#GET /ori/route/route
+#GET /ori/route/route    @controllers.RouteController.optimalRoute()
