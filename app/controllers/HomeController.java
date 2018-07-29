@@ -2,11 +2,21 @@ package controllers;
 
 import play.mvc.*;
 
+import javax.inject.Inject;
+
 /**
  * This controller contains an action to handle HTTP requests
  * to the application's home page.
  */
 public class HomeController extends Controller {
+    /**
+     * Instantiate graph
+     */
+    protected GraphController gc;
+    @Inject
+    HomeController(GraphController gc){
+        this.gc = gc;
+    }
 
     /**
      * An action that renders an HTML page with a welcome message.
