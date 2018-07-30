@@ -15,4 +15,4 @@ POST /ori/route         @controllers.RouteController.createGrid()
 
 GET /ori/route         @controllers.RouteController.getGrid()
 
-#GET /ori/route/route    @controllers.RouteController.optimalRoute()
+GET /ori/route/route    @controllers.RouteController.optimalRoute()

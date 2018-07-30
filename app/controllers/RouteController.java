@@ -1,6 +1,5 @@
 package controllers;
 
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -82,9 +81,23 @@ public class RouteController extends Controller {
         return ok(gridArray);
     }
 //
-//    public  Result optimalRoute () {
-//        return null;
-//    }
+    public  Result optimalRoute () {
+        String source, destination;
+        source = getRequestParam("source", "source should not be null or empty");
+        destination = getRequestParam("destination", "destination should not be null or empty");
+        System.out.println(source + " : " + destination);
+        if(edges == null) {
+            return badRequest("No grid found!");
+        }
+
+        return ok();
+    }
+
+    private String getRequestParam(String param, String msg) {
+        String value[] = request().queryString().get(param);
+        Preconditions.checkArgument(value != null && !value[0].isEmpty(), msg);
+        return value[0].trim();
+    }
 
     private void addLane(String laneId, String sourceLocNo, String destLocNo, double duration) {
         Edge lane = new Edge(laneId,nodes.get(Integer.parseInt(sourceLocNo)), nodes.get(Integer.parseInt(destLocNo)), duration );

@@ -12,14 +12,6 @@ import java.util.List;
  * to the application's home page.
  */
 public class HomeController extends Controller {
-    /**
-     * Instantiate graph
-     */
-    protected List<Vertex> nodes;
-    protected List<Edge> edges;
-    @Inject
-    HomeController(){
-    }
 
     /**
      * An action that renders an HTML page with a welcome message.
