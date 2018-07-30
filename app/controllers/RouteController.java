@@ -2,6 +2,7 @@ package controllers;
 
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Preconditions;
@@ -9,6 +10,7 @@ import models.Edge;
 import models.Vertex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import scala.util.parsing.json.JSONObject;
@@ -21,17 +23,13 @@ import java.util.List;
 public class RouteController extends Controller {
 
     Logger logger = LoggerFactory.getLogger(RouteController.class);
-    protected GraphController gc;
+    public static List<Vertex> nodes;
+    public static List<Edge> edges;
     @Inject
-    RouteController(GraphController gc){
-        this.gc = gc;
+    RouteController(){
     }
 
-    private List<Vertex> nodes;
-    private List<Edge> edges;
-
     public Result createGrid() {
-
         nodes = new ArrayList<Vertex>();
         edges = new ArrayList<Edge>();
 
@@ -68,9 +66,21 @@ public class RouteController extends Controller {
 //        return null;
 //    }
 //
-//    public Result getGrid () {
-//        return null;
-//    }
+    public Result getGrid () {
+        if(edges == null) {
+            return badRequest("grid not found");
+        }
+        ArrayNode gridArray = new ObjectMapper().createArrayNode();
+        for (Edge edge:
+        edges) {
+            ObjectNode gridNode = Json.newObject();
+            gridNode.put("Source", edge.getSource().getId());
+            gridNode.put("Destination", edge.getDestination().getId());
+            gridNode.put("Duration", edge.getWeight());
+            gridArray.add(gridNode);
+        }
+        return ok(gridArray);
+    }
 //
 //    public  Result optimalRoute () {
 //        return null;

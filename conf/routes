@@ -13,6 +13,6 @@ POST /ori/route         @controllers.RouteController.createGrid()
 
 #PUT /ori/route         @controllers.RouteController.updateGrid()
 
-#GET /ori/route         @controllers.RouteController.getGrid()
+GET /ori/route         @controllers.RouteController.getGrid()
 
 #GET /ori/route/route    @controllers.RouteController.optimalRoute()

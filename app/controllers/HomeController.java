@@ -1,8 +1,11 @@
 package controllers;
 
+import models.Edge;
+import models.Vertex;
 import play.mvc.*;
 
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * This controller contains an action to handle HTTP requests
@@ -12,10 +15,10 @@ public class HomeController extends Controller {
     /**
      * Instantiate graph
      */
-    protected GraphController gc;
+    protected List<Vertex> nodes;
+    protected List<Edge> edges;
     @Inject
-    HomeController(GraphController gc){
-        this.gc = gc;
+    HomeController(){
     }
 
     /**
