@@ -114,7 +114,18 @@ public class RouteController extends Controller {
             findMinimalDistances(node);
         }
         LinkedList<Vertex> path =getPath(nodes.get(dest));
-        return ok(Json.toJson(path));
+
+        String result = "";
+        for (Vertex v: path
+             ) {
+            if(result== ""){
+                result =v.getId().substring(5);
+            } else {
+                result += "-" + v.getId().substring(5);
+            }
+        }
+
+        return ok(result);
     }
 
     private void findMinimalDistances(Vertex node) {
