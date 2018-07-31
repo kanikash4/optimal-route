@@ -1,0 +1,99 @@
+{
+	"variables": [],
+	"info": {
+		"name": "optimal-route-identification",
+		"_postman_id": "bd406cb8-9133-8fe9-a4b9-bc2ea130274f",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create route",
+			"request": {
+				"url": "localhost:9000/ori/route",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\t\"id\":\"0\",\n\t\"length\":\"2\",\n\t\"speed\":\"3\",\n\t\"source\":\"A\",\n\t\"destination\":\"B\"\n},\n{\n\t\"id\":\"1\",\n\t\"length\":\"3\",\n\t\"speed\":\"2\",\n\t\"source\":\"B\",\n\t\"destination\":\"D\"\n},{\n\t\"id\":\"2\",\n\t\"length\":\"5\",\n\t\"speed\":\"1\",\n\t\"source\":\"B\",\n\t\"destination\":\"C\"\n},{\n\t\"id\":\"3\",\n\t\"length\":\"2\",\n\t\"speed\":\"3\",\n\t\"source\":\"C\",\n\t\"destination\":\"D\"\n},{\n\t\"id\":\"4\",\n\t\"length\":\"2\",\n\t\"speed\":\"3\",\n\t\"source\":\"A\",\n\t\"destination\":\"E\"\n},\n{\n\t\"id\":\"5\",\n\t\"length\":\"3\",\n\t\"speed\":\"2\",\n\t\"source\":\"E\",\n\t\"destination\":\"C\"\t\n}]"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "update route",
+			"request": {
+				"url": "localhost:9000/ori/route",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\t\"operation\":\"add\",\n\t\"source\":\"E\",\n\t\"destination\":\"D\",\n\t\"length\":\"2\",\n\t\"speed\":\"3\"\n},{\n\t\"operation\":\"delete\",\n\t\"source\":\"E\",\n\t\"destination\":\"C\"\n},{\n\t\"operation\":\"update\",\n\t\"source\":\"B\",\n\t\"destination\":\"C\",\n\t\"length\":\"50\",\n\t\"speed\":\"1\"\n},{\n\t\"operation\":\"update\",\n\t\"source\":\"E\",\n\t\"destination\":\"D\",\n\t\"length\":\"50\",\n\t\"speed\":\"1\"\n}\n]"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get route",
+			"request": {
+				"url": "localhost:9000/ori/route",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get optimal route",
+			"request": {
+				"url": {
+					"raw": "localhost:9000/ori/route/route?source=A&destination=C",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"ori",
+						"route",
+						"route"
+					],
+					"query": [
+						{
+							"key": "source",
+							"value": "A",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "destination",
+							"value": "C",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
