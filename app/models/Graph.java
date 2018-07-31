@@ -8,8 +8,10 @@ public class Graph {
     private final List<Edge> edges;
 
     public Graph(List<Vertex> vertexes, List<Edge> edges) {
-        this.vertexes = vertexes;
-        this.edges = edges;
+        synchronized (this){
+            this.vertexes = vertexes;
+            this.edges = edges;
+        }
     }
 
     public List<Vertex> getVertexes() {

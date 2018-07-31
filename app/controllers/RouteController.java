@@ -21,6 +21,7 @@ public class RouteController extends Controller {
     Logger logger = LoggerFactory.getLogger(RouteController.class);
     public static Map<String,Vertex> nodes;
     public static List<Edge> edges;
+    public static List<Edge> updateEdge =new ArrayList<Edge>();;
     private Set<Vertex> settledNodes;
     private Set<Vertex> unSettledNodes;
     private Map<Vertex, Vertex> predecessors;
@@ -42,7 +43,6 @@ public class RouteController extends Controller {
             Iterator<JsonNode> iterator = request.iterator();
             while (iterator.hasNext()) {
                 JsonNode obj = iterator.next();
-                id = utils.validate.validateAndReturn(obj, "id", "id can not be empty or null");
                 length = utils.validate.validateAndReturn(obj, "length", "length can not be empty or null");
                 speed = utils.validate.validateAndReturn(obj, "speed", "speed can not be empty or null");
                 source = utils.validate.validateAndReturn(obj, "source", "speed can not be empty or null");
@@ -57,7 +57,7 @@ public class RouteController extends Controller {
                     nodes.put(destination,location);
                 }
 
-                addLane(id, source, destination, Double.valueOf(length) / Double.valueOf(speed));
+                addLane(source, destination, Double.valueOf(length) / Double.valueOf(speed));
 
 
             }
@@ -71,9 +71,59 @@ public class RouteController extends Controller {
         return ok("Route Created successfully");
     }
 
-//    public Result updateGrid() {
-//        return null;
-//    }
+    public Result updateGrid() {
+        if(edges == null) {
+            return badRequest("Grid not found");
+        }
+        try {
+            JsonNode request = request().body().asJson();
+            String id, length=null, speed=null, source, destination, operation;
+            Preconditions.checkArgument(request != null, "request is empty or null");
+
+            Iterator<JsonNode> iterator = request.iterator();
+            while (iterator.hasNext()) {
+                JsonNode obj = iterator.next();
+                operation = utils.validate.validateAndReturn(obj,"operation","operation can not be empty");
+                if(operation.equalsIgnoreCase("add") || operation.equalsIgnoreCase("update")){
+                    length = utils.validate.validateAndReturn(obj, "length", "length can not be empty or null");
+                    speed = utils.validate.validateAndReturn(obj, "speed", "speed can not be empty or null");
+                }
+
+                source = utils.validate.validateAndReturn(obj, "source", "speed can not be empty or null");
+                destination = utils.validate.validateAndReturn(obj, "destination", "destination can not be empty or null");
+                if(operation.equalsIgnoreCase("add")) {
+                    if(nodes.containsKey(source) && nodes.containsKey(destination)) {
+                        addLane(source, destination, Double.valueOf(length) / Double.valueOf(speed));
+                    }
+                } else if(operation.equalsIgnoreCase("update")) {
+                    for (Iterator<Edge> iter = edges.listIterator(); iter.hasNext(); ) {
+                        Edge edge = iter.next();
+                        if(edge.getSource().getId().substring(5).equalsIgnoreCase(source) && edge.getDestination().getId().substring(5).equalsIgnoreCase(destination)){
+                            addLaneUpdate(source, destination, Double.valueOf(length) / Double.valueOf(speed));
+                            iter.remove();
+                        }
+                    }
+                }
+                else {
+                    for (Iterator<Edge> iter = edges.listIterator(); iter.hasNext(); ) {
+                        Edge edge = iter.next();
+                        if(edge.getSource().getId().substring(5).equalsIgnoreCase(source) && edge.getDestination().getId().substring(5).equalsIgnoreCase(destination)){
+                            System.out.println("delete");
+                            iter.remove();
+                        }
+                    }
+                }
+            }
+            edges.addAll(updateEdge);
+        } catch (IllegalArgumentException ie){
+            logger.warn("Incorrect Input request : cause: {}", ie.getMessage());
+            return badRequest("Incorrect Input request");
+        } catch (Exception e) {
+            logger.warn("Error while creating the grid");
+            return badRequest("Error while creating the grid" + e.getMessage());
+        }
+        return ok("Route updated successfully");
+    }
 
     public Result getGrid () {
         if(edges == null) {
@@ -188,7 +238,7 @@ public class RouteController extends Controller {
     private LinkedList<Vertex> getPath(Vertex target) {
         LinkedList<Vertex> path = new LinkedList<Vertex>();
         Vertex step = target;
-        // check if a path exists
+        // checking if a path exists
         if (predecessors.get(step) == null) {
             return null;
         }
@@ -197,7 +247,7 @@ public class RouteController extends Controller {
             step = predecessors.get(step);
             path.add(step);
         }
-        // Put it into the correct order
+        // Putting into the correct order
         Collections.reverse(path);
         return path;
     }
@@ -208,9 +258,14 @@ public class RouteController extends Controller {
         return value[0].trim();
     }
 
-    private void addLane(String laneId, String sourceLocNo, String destLocNo, double duration) {
-        Edge lane = new Edge(laneId,nodes.get(sourceLocNo), nodes.get(destLocNo), duration );
+    private void addLane(String sourceLocNo, String destLocNo, double duration) {
+        Edge lane = new Edge(nodes.get(sourceLocNo), nodes.get(destLocNo), duration );
         edges.add(lane);
+    }
+
+    private void  addLaneUpdate(String sourceLocNo, String destLocNo, double duration) {
+        Edge lane = new Edge(nodes.get(sourceLocNo), nodes.get(destLocNo), duration );
+        updateEdge.add(lane);
     }
 
 }

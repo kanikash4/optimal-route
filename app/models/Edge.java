@@ -1,17 +1,17 @@
 package models;
 
-public class Edge {
-    private final String id;
+import java.io.Serializable;
+
+public class Edge implements Serializable {
+
     private final Vertex source;
     private final Vertex destination;
     private final double weight;
     private  String length;
     private  String speed;
 
+    public Edge(Vertex source, Vertex destination, int weight, String length, String speed) {
 
-
-    public Edge(String id, Vertex source, Vertex destination, int weight, String length, String speed) {
-        this.id = id;
         this.source = source;
         this.destination = destination;
         this.weight = weight;
@@ -19,18 +19,12 @@ public class Edge {
         this.speed = speed;
     }
 
-
-    public Edge(String id, Vertex source, Vertex destination, double weight) {
-        this.id = id;
+    public Edge(Vertex source, Vertex destination, double weight) {
         this.source = source;
         this.destination = destination;
         this.weight = weight;
-
     }
 
-    public String getId() {
-        return id;
-    }
     public Vertex getDestination() {
         return destination;
     }

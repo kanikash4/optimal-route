@@ -11,7 +11,7 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 POST /ori/route         @controllers.RouteController.createGrid()
 
-#PUT /ori/route         @controllers.RouteController.updateGrid()
+PUT /ori/route         @controllers.RouteController.updateGrid()
 
 GET /ori/route         @controllers.RouteController.getGrid()
 
